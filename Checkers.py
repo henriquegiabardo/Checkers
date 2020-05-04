@@ -196,7 +196,7 @@ def capture_is_valid(board, piece, enemy_piece, actual_row, actual_col, enemy_ro
 	return False
 
 
-def draw_board(board, click_row, click_col):
+def draw_board(board, click_row, click_col, myfont, points_player1, points_player2, turn):
 	for i in range (10):
 		for j in range (10):
 			# drawing the squares
@@ -223,6 +223,30 @@ def draw_board(board, click_row, click_col):
 
 	# i draw this circle to know where was the last player click
 	pygame.draw.circle(screen, YELLOW, (int(click_col*SQUARESIZE + SQUARESIZE / 2), int(click_row*SQUARESIZE + SQUARESIZE / 2)), RADIUS - 25)
+
+	if(points_player1 == 12):
+		label = myfont.render("PLAYER 1 WINS!", 1, DARK_RED)
+		screen.blit(label,(9*SQUARESIZE,0))
+
+	if(points_player2 == 12):
+		label = myfont.render("PLAYER 2 WINS!", 1, WHITE)
+		screen.blit(label,(9*SQUARESIZE,0))
+
+	label_points1 = myfont.render(("PLAYER 1 POINTS:" + str(points_player1)), 1, WHITE)
+	screen.blit(label_points1, (0, 0))
+
+	label_points2 = myfont.render(("PLAYER 2 POINTS:" + str(points_player2)), 1, RED)
+	screen.blit(label_points2, (5*SQUARESIZE, 0))
+
+	if(turn == 0): # player 1 turn
+		label_turn1 = myfont.render(("PLAYER 1 TURN"), 1, WHITE)
+		screen.blit(label_turn1, (0, 30))
+
+	else: # player 2 turn
+		label_turn2 = myfont.render(("PLAYER 2 TURN"), 1, RED)
+		screen.blit(label_turn2, (5*SQUARESIZE, 30))
+
+
 	pygame.display.update()
 
 # not used function, it didnt work. I made this one when started dev click instead input by keyboard
@@ -246,9 +270,13 @@ def is_game_over(points_player1, points_player2, board): # verify end of the gam
 	# each player has 12 pieces, so if he looses all his pieces, the other has 12 points
 	if points_player1 == 12: 
 		print("Player 1 achieves 12 points and Wins", points_player1)
+		label = myfont.render("PLAYER 1 WINS!", 1, RED)
+		screen.blit(label, (40,10))
 		return True
 	elif points_player2 == 12:
 		print("Player 2 achieves 12 points and Wins!", points_player2)
+		label = myfont.render("PLAYER 2 WINS!", 1, WHITE)
+		screen.blit(label, (40,10))
 		return True
 	#elif player_cannot_play(board):
 		#return True
@@ -320,7 +348,11 @@ size = (width, width)
 RADIUS = int(SQUARESIZE / 2 -  5)
 screen = pygame.display.set_mode(size)
 
-draw_board(board, 0, 0)
+
+
+
+myfont = pygame.font.SysFont("monospace", 25)
+draw_board(board, 0, 0, myfont, points_player1, points_player2, turn)
 pygame.display.update()
 
 while not game_over:
@@ -408,20 +440,22 @@ while not game_over:
 						#print ("player2 point", points_player2)
 						was_capture_streak = False
 
-			print("Player 1 Points:", points_player1)
-			print("Player 2 Points:", points_player2)
 			game_over = is_game_over(points_player1, points_player2, board)
 			transform_king(board) # verify if there is any pawn that can be a king
 
-			print(board)
+			#print(board)
 			if(its_even(cont_clicks)): # its used to print the yellow circle of the last click
-				draw_board(board, row, col)
+				draw_board(board, row, col, myfont, points_player1, points_player2, turn)
 			else:
-				draw_board(board, row_2, col_2)
+				draw_board(board, row_2, col_2, myfont, points_player1, points_player2, turn)
 
 			if ((type(avance_turn) is bool) and avance_turn): # makes turn goes 0 1 0
+				print(board)
+				print("Player 1 Points:", points_player1)
+				print("Player 2 Points:", points_player2)
 				turn += 1
 				turn = turn % 2
 
-			
+		
+pygame.time.wait(3000)			
 pygame.quit()
