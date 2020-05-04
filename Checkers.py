@@ -225,12 +225,12 @@ def draw_board(board, click_row, click_col, myfont, points_player1, points_playe
 	pygame.draw.circle(screen, YELLOW, (int(click_col*SQUARESIZE + SQUARESIZE / 2), int(click_row*SQUARESIZE + SQUARESIZE / 2)), RADIUS - 25)
 
 	if(points_player1 == 12):
-		label = myfont.render("PLAYER 1 WINS!", 1, DARK_RED)
-		screen.blit(label,(9*SQUARESIZE,0))
+		label = myfont.render("PLAYER 1 WINS!", 1, RED)
+		screen.blit(label,(0,9*SQUARESIZE))
 
 	if(points_player2 == 12):
 		label = myfont.render("PLAYER 2 WINS!", 1, WHITE)
-		screen.blit(label,(9*SQUARESIZE,0))
+		screen.blit(label,(0,9*SQUARESIZE))
 
 	label_points1 = myfont.render(("PLAYER 1 POINTS:" + str(points_player1)), 1, WHITE)
 	screen.blit(label_points1, (0, 0))
@@ -457,5 +457,5 @@ while not game_over:
 				turn = turn % 2
 
 		
-pygame.time.wait(3000)			
+pygame.time.wait(6000)			
 pygame.quit()
